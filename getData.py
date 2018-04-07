@@ -96,7 +96,7 @@ def main(args):
     a = datetime.datetime.now()
 
 
-    folder_name = "/home/arpit/502 project/v rep/" +str(a.day)+ '_' + str(a.hour)+ '_' + str(a.minute) + str(a.second)
+    folder_name = "/home/arpit/502 project/v rep/" +str(a.day)+ '_' + str(a.hour)+ '_' + str(a.minute) + '_' + str(a.second)
 
     print(folder_name)
 

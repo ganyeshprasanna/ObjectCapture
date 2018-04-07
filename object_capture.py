@@ -9,6 +9,7 @@ from PIL import Image as I
 from PIL import Image
 from multiprocessing import Process
 
+import getData
 def getSensorPose(clientID, handle):
     res, floor_handle = vrep.simxGetObjectHandle(clientID, 'Graph', vrep.simx_opmode_blocking)
     res, s_handle = vrep.simxGetObjectHandle(clientID, 'kinect', vrep.simx_opmode_blocking)
@@ -89,10 +90,13 @@ if __name__ == "__main__":
     vrep.simxFinish(-1) # just in case, close all opened connections
     clientID=vrep.simxStart('127.0.0.1',19997,True,True,5000,5) # Connect to V-REP
     #clientID = 0
-    res, floor_handle = vrep.simxGetObjectHandle(clientID, 'Graph', vrep.simx_opmode_blocking)
+    res, floor_handle = vrep.simxGetObjectHandle(clientID, 'floor_handle', vrep.simx_opmode_blocking)
     res, s_handle = vrep.simxGetObjectHandle(clientID, 'kinect', vrep.simx_opmode_blocking)
     position = vrep.simxGetObjectPosition(clientID, s_handle, vrep.sim_handle_parent, vrep.simx_opmode_blocking)
-    orientation = vrep.simxGetObjectOrientation(clientID, s_handle, vrep.sim_handle_parent, vrep.simx_opmode_blocking)
+    orientation = vrep.simxGetObjectOrientation(clientID, s_handle, vrep.sim_handle_parent, vrep.simx_opmode_buffer)
+
+    print(position)
+    print(orientation)
 
     while True:
         char = getch()
@@ -144,7 +148,8 @@ if __name__ == "__main__":
                 img2 = np.asarray(image_buffer)
                 img_time=vrep.simxGetLastCmdTime(clientID)
                 #print(img_time)
-                cv2.imwrite(str(img_time)+'.png',img2)
+
+                #cv2.imwrite(str(img_time)+'.png',img2)
 
                 time1=vrep.simxGetLastCmdTime(clientID)
 
