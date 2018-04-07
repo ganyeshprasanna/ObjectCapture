@@ -9,6 +9,9 @@ and publishes the new image - again as CompressedImage topic.
 
 # Python libs
 import sys, time
+import os
+
+import datetime
 
 # numpy and scipy
 import numpy as np
@@ -31,7 +34,9 @@ VERBOSE=False
 
 class image_feature:
 
-    def __init__(self):
+    def __init__(self, folder_name):
+
+        self.folder_name = folder_name
 
         self.subscriber = rospy.Subscriber("/image",
                                            Image, self.callback,  queue_size = 1)
@@ -85,11 +90,19 @@ class image_feature:
 
         #cv2.imshow('cv_img', image_np)
         #cv2.waitKey(2)
-        cv2.imwrite(str(time2)+'.png',img2)
+        cv2.imwrite(self.folder_name + "/" + str(time2)+".png", img2)
 
 def main(args):
+    a = datetime.datetime.now()
+
+
+    folder_name = "/home/arpit/502 project/v rep/" +str(a.day)+ '_' + str(a.hour)+ '_' + str(a.minute) + str(a.second)
+
+    print(folder_name)
+
+    os.makedirs(folder_name)
     '''Initializes and cleanup ros node'''
-    ic = image_feature()
+    ic = image_feature(folder_name)
     rospy.init_node('image_feature', anonymous=True)
     try:
         rospy.spin()
